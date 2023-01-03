@@ -46,7 +46,7 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    'registros',
+    'apps.registros',
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + LOCAL_APPS + THIRD_PARTY_APPS
