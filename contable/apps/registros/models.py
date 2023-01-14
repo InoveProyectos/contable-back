@@ -128,7 +128,7 @@ class Asiento(models.Model):
     Asiento'''
 
     id = models.BigAutoField(primary_key=True)
-    descripcion = models.CharField(max_length=300, default='', blank=True)
+    descripcion = models.CharField(max_length=300, default='')
     fecha_registro = models.DateTimeField()
   
     class Meta:
@@ -174,15 +174,15 @@ class Registro(models.Model):
     id = models.BigAutoField(primary_key=True)
     cuenta = models.ForeignKey(Cuenta, on_delete=models.CASCADE)
     asiento = models.ForeignKey(Asiento, on_delete=models.CASCADE, default=None)
-    numero_operacion = models.PositiveIntegerField(default="") # Consultar si este campo puede estar en blanco o nulo blank=True, null=True
-    concepto = models.CharField(max_length=150, default='', blank=True)
+    numero_operacion = models.PositiveIntegerField(default="") 
+    concepto = models.CharField(max_length=150)
     tipo_comprobante = models.ForeignKey(TipoComprobante, on_delete=models.CASCADE)
-    debe = models.FloatField(default='')
-    haber = models.FloatField(default='')
+    debe = models.FloatField(default=0)
+    haber = models.FloatField(default=0)
     fecha_registro = models.DateTimeField()
     fecha_efectiva = models.DateTimeField()
     comprobante = models.ForeignKey(Comprobante, on_delete=models.CASCADE)    
-    observaciones = models.CharField(max_length=300, default='', blank=True)        
+    observaciones = models.CharField(max_length=300, default='')        
 
     class Meta:
         db_table = 'registro'
