@@ -66,7 +66,7 @@ class Identificacion(models.Model):
     identificacion'''
 
     id = models.BigAutoField(primary_key=True)
-    identificador = models.CharField(max_length=60) # Consultar el tipo de dato
+    identificador = models.CharField(max_length=60) 
     tipo_identificacion = models.ForeignKey(TipoIdentificacion, on_delete=models.CASCADE)
     entidad = models.ForeignKey(Entidad, on_delete=models.CASCADE)
     
@@ -125,10 +125,10 @@ class Cuenta(models.Model):
 
 class Asiento(models.Model):
     '''Esta clase hereda de Django models.Model y crea una tabla llamada
-    Asiento'''
+    asiento'''
 
     id = models.BigAutoField(primary_key=True)
-    descripcion = models.CharField(max_length=300, default='')
+    descripcion = models.CharField(max_length=300)
     fecha_registro = models.DateTimeField()
   
     class Meta:
@@ -140,7 +140,7 @@ class Asiento(models.Model):
 
 class TipoComprobante(models.Model):
     '''Esta clase hereda de Django models.Model y crea una tabla llamada
-    cuenta'''
+    tipo_comprobante'''
 
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=60)     
@@ -154,7 +154,7 @@ class TipoComprobante(models.Model):
 
 class Comprobante(models.Model):
     '''Esta clase hereda de Django models.Model y crea una tabla llamada
-    cuenta'''
+    comprobante'''
 
     id = models.BigAutoField(primary_key=True)
     link_comprobante = models.CharField(default=None)     
@@ -188,6 +188,6 @@ class Registro(models.Model):
         db_table = 'registro'
 
     def __str__(self):
-        return f'{self.cuenta}, {self.asiento}, {self.numero_operacion}, {self.concepto},{self.debe}, {self.haber}'
+        return f'{self.cuenta}, {self.asiento}, {self.numero_operacion}, {self.concepto},{self.tipo_comprobante}, {self.debe}, {self.haber}, {self.fecha_registro}, {self.fecha_efectiva}'
 
 
