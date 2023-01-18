@@ -6,5 +6,5 @@ urlpatterns = [
 
 
     # Ejemplo registro API Viewsets:
-    path('api/', include('registro.api.routers')),
+    path('api/', include('registros.api.routers')),
 ]
