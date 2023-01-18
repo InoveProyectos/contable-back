@@ -10,5 +10,7 @@ router = DefaultRouter()
 # Primer ejemplo
 router.register(r'modelviewset/registro', RegistroViewSet)
 
+#router.register(r'modelviewset/tipo_entidad', TipoEntidadViewSet)
+
 
 urlpatterns = router.urls
