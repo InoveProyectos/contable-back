@@ -157,7 +157,7 @@ class Comprobante(models.Model):
     comprobante'''
 
     id = models.BigAutoField(primary_key=True)
-    link_comprobante = models.CharField(default=None)     
+    link_comprobante = models.CharField(max_length=350, default=None)  # Add max_length
        
     class Meta:
         db_table = 'comprobante'

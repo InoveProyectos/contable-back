@@ -1,5 +1,5 @@
 # Se importa los viewsets
-from .viewsets import *
+from .viewsets import TipoEntidadViewSet
 # Se importa la clase DefaultRouter
 from rest_framework.routers import DefaultRouter
 
@@ -7,10 +7,9 @@ from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 
 # Registrar las vistas
-# Primer ejemplo
-router.register(r'modelviewset/registro', RegistroViewSet)
 
-#router.register(r'modelviewset/tipo_entidad', TipoEntidadViewSet)
+# Primer ejemplo---> GET /registros/api/modelviewset/tipo_entidad/
+router.register(r'modelviewset/tipo_entidad', viewset=TipoEntidadViewSet) 
 
 
 urlpatterns = router.urls
