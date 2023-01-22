@@ -8,8 +8,8 @@ router = DefaultRouter()
 
 # Registrar las vistas
 
-# Primer ejemplo---> GET /registros/api/modelviewset/tipo_entidad/
-router.register(r'modelviewset/tipo_entidad', viewset=TipoEntidadViewSet) 
+# Primer ejemplo---> GET /registros/api/tipo_entidad_vs/
+router.register(r'tipo_entidad_vs', viewset=TipoEntidadViewSet, basename='tipo_entidad_vs') 
 
 
 urlpatterns = router.urls

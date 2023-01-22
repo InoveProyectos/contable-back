@@ -3,31 +3,24 @@ from ..models import *
 # Se importa serializadores
 from .serializers import *
 # Se importa el módulo ViewSets que ofrece DRF
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.response import Response
 
 class RegistroViewSet(viewsets.ModelViewSet):
     permission_classes = [] # Falta autenticación
     serializer_class = RegistroSerializer
     queryset = serializer_class.Meta.model.objects.all()
+    
+    # def post(self,request, *args, **kwargs):
+    #     return Response(status=status.HTTP_200_OK)
 
 
 class TipoEntidadViewSet(viewsets.ModelViewSet):
     permission_classes = [] # Falta autenticación
     serializer_class = TipoEntidadSerializer
     queryset = serializer_class.Meta.model.objects.all()
-
-    # def create(self, request, *args, **kwargs):
-    #     data = request.data
-
-    #     new_tipo_entidad = TipoEntidad.objects.create(data['name'])
-    #     new_tipo_entidad.save()
-
-    #     # Serializar el nuevo objeto creado
-    #     serializer = TipoEntidadSerializer(new_tipo_entidad)
-
-    #     return Response(serializer.data)
-
+    
+    
 class CondicionImpositivaViewSet(viewsets.ModelViewSet):
     permission_classes = [] # Falta autenticación
     serializer_class = CondicionImpositivaSerializer
