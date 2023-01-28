@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -45,6 +46,8 @@ THIRD_PARTY_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+    'drf_yasg', # swagger
+
     ]
 
 LOCAL_APPS = [
@@ -77,6 +80,41 @@ REST_FRAMEWORK = {
     ),
 }
 
+# SWAGGER_______________________________________________________
+# API DOCS Settings:
+# https://drf-yasg.readthedocs.io/en/stable/settings.html
+##LOGOUT_URL = '/admin/logout'
+
+
+# Acá van todas las configuraciones para la UI de Swagger.
+# Comente los parámetros para que no solicite toke, login--->
+SWAGGER_SETTINGS = {
+   # Seteo los tipos de Authenticaciones que puedo utilizar en
+   # Swagger.
+   # https://drf-yasg.readthedocs.io/en/stable/settings.html#security-definitions-settings
+   'SECURITY_DEFINITIONS': {
+       # HTTP Basic Authentication:
+    #    'basic': {
+    #        'type': 'basic'
+    #    },
+       # Token Authentication:
+    #    'DRF Token': {
+    #           'type': 'apiKey',
+    #           'name': 'Authorization',
+    #           'in': 'header'
+    #     }
+   },
+   ##"USE_SESSION_AUTH": True,
+   ##'LOGIN_URL': LOGIN_URL,
+   ##'LOGOUT_URL': LOGOUT_URL
+}
+
+
+# Acá van todas las configuraciones para la UI de Redoc.
+REDOC_SETTINGS = {
+  'LAZY_RENDERING': False,
+}
+#___________________________________________________________________
 
 
 # CORS
@@ -95,6 +133,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'templates')], # ¡ADD ESTA LINEA! arriba import os
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

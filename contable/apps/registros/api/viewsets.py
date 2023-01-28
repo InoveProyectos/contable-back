@@ -11,10 +11,7 @@ class RegistroViewSet(viewsets.ModelViewSet):
     serializer_class = RegistroSerializer
     queryset = serializer_class.Meta.model.objects.all()
     
-    # def post(self,request, *args, **kwargs):
-    #     return Response(status=status.HTTP_200_OK)
-
-
+    
 class TipoEntidadViewSet(viewsets.ModelViewSet):
     permission_classes = [] # Falta autenticación
     serializer_class = TipoEntidadSerializer
