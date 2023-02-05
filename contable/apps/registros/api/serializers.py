@@ -1,7 +1,8 @@
 # Se imporat modelos
 from ..models import Registro, TipoEntidad, CondicionImpositiva, Entidad, TipoIdentificacion, Identificacion, TipoCuenta, Moneda, Cuenta, Asiento, TipoComprobante, Comprobante
 # Se importa los serializadores de Django
-from rest_framework import serializers
+from rest_framework import serializers, status
+from rest_framework.response import Response
 
 
 class RegistroSerializer(serializers.ModelSerializer):

@@ -3,8 +3,8 @@ from ..models import *
 # Se importa serializadores
 from .serializers import *
 # Se importa el módulo ViewSets que ofrece DRF
-from rest_framework import viewsets, status
-from rest_framework.response import Response
+from rest_framework import viewsets
+
 
 class RegistroViewSet(viewsets.ModelViewSet):
     permission_classes = [] # Falta autenticación
@@ -16,7 +16,7 @@ class TipoEntidadViewSet(viewsets.ModelViewSet):
     permission_classes = [] # Falta autenticación
     serializer_class = TipoEntidadSerializer
     queryset = serializer_class.Meta.model.objects.all()
-    
+
     
 class CondicionImpositivaViewSet(viewsets.ModelViewSet):
     permission_classes = [] # Falta autenticación
@@ -27,7 +27,7 @@ class CondicionImpositivaViewSet(viewsets.ModelViewSet):
 class EntidadViewSet(viewsets.ModelViewSet):
     permission_classes = [] # Falta autenticación
     serializer_class = EntidadSerializer
-    queryset = serializer_class.Meta.model.objects.all()
+    queryset = serializer_class.Meta.model.objects.all()  
 
 
 class TipoIdentificacionViewSet(viewsets.ModelViewSet):
