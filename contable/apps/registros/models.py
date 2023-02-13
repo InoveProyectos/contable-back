@@ -123,7 +123,6 @@ class Cuenta(models.Model):
         return f'{self.name}, {self.entidad}, {self.tipo_cuenta}, {self.moneda}'
 
 
-
 class Retenciones(models.Model):
     '''Esta clase hereda de Django models.Model y crea una tabla llamada
     retenciones'''
@@ -227,8 +226,8 @@ class CuentasAsociadas(models.Model):
                 self.cuenta_asociente.save()
                 self.cuenta_asociada.save()
 
-        except Exception as e:
-            e.add_note('cuenta_asociente_id es igual a cuenta_asociada_id')
+        except ValueError:
+            print('cuenta_asociente_id es igual a cuenta_asociada_id')
             raise    
 
         # Guardar los cambios
