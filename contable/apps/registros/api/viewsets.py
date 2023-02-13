@@ -12,9 +12,9 @@ class RegistroViewSet(viewsets.ModelViewSet):
     queryset = serializer_class.Meta.model.objects.all()
     
     
-class TipoEntidadViewSet(viewsets.ModelViewSet):
+class CategoriaViewSet(viewsets.ModelViewSet):
     permission_classes = [] # Falta autenticación
-    serializer_class = TipoEntidadSerializer
+    serializer_class = CategoriaSerializer
     queryset = serializer_class.Meta.model.objects.all()
 
     
@@ -76,3 +76,15 @@ class ComprobanteViewSet(viewsets.ModelViewSet):
     permission_classes = [] # Falta autenticación
     serializer_class = ComprobanteSerializer
     queryset = serializer_class.Meta.model.objects.all()
+
+class RetencionesViewSet(viewsets.ModelViewSet):
+    permission_classes = [] # Falta autenticación
+    serializer_class = RetencionesSerializer
+    queryset = serializer_class.Meta.model.objects.all()
+
+
+class CuentasAsociadasViewSet(viewsets.ModelViewSet):
+    permission_classes = [] # Falta autenticación
+    serializer_class = CuentasAsociadasSerializer
+    queryset = serializer_class.Meta.model.objects.all()
+
