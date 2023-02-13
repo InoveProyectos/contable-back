@@ -1,5 +1,5 @@
 # Se imporat modelos
-from ..models import Registro, TipoEntidad, CondicionImpositiva, Entidad, TipoIdentificacion, Identificacion, TipoCuenta, Moneda, Cuenta, Asiento, TipoComprobante, Comprobante
+from ..models import *
 # Se importa los serializadores de Django
 from rest_framework import serializers, status
 from rest_framework.response import Response
@@ -30,10 +30,10 @@ class RegistroSerializer(serializers.ModelSerializer):
 
 
 
-class TipoEntidadSerializer(serializers.ModelSerializer):
+class CategoriaSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = TipoEntidad
+        model = Categoria
         fields = ('id','name')
 
     
@@ -46,14 +46,14 @@ class CondicionImpositivaSerializer(serializers.ModelSerializer):
 
 class EntidadSerializer(serializers.ModelSerializer):
     #Atributos relacionados, cuyos valores representan un foreingkey
-    tipo_entidad = serializers.PrimaryKeyRelatedField(write_only=True, queryset= TipoEntidad.objects.all())
+    categoria = serializers.PrimaryKeyRelatedField(write_only=True, queryset= Categoria.objects.all())
     condicion_impositiva = serializers.PrimaryKeyRelatedField(write_only=True, queryset= CondicionImpositiva.objects.all())
     
     class Meta:
         model = Entidad
         fields = ('id', 
                   'name',
-                  'tipo_entidad', 
+                  'categoria', 
                   'condicion_impositiva')
 
 
@@ -106,6 +106,19 @@ class CuentaSerializer(serializers.ModelSerializer):
                   'moneda')
 
 
+class RetencionesSerializer(serializers.ModelSerializer):
+    #Atributos relacionados, cuyos valores representan un foreingkey
+    cuenta = serializers.PrimaryKeyRelatedField(write_only=True, queryset= Cuenta.objects.all())
+
+    class Meta:
+        model = Retenciones
+        fields = ('id', 
+                  'cuenta',
+                  'valor', 
+                  'unidad',
+                  'ultima_modificacion')
+
+
 class AsientoSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -125,3 +138,13 @@ class ComprobanteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comprobante
         fields = ('id','link_comprobante')
+
+
+class CuentasAsociadasSerializer(serializers.ModelSerializer):
+    #Atributos relacionados, cuyos valores representan un foreingkey
+    cuenta_asociente = serializers.PrimaryKeyRelatedField(write_only=True, queryset= Cuenta.objects.all())
+    cuenta_asociada = serializers.PrimaryKeyRelatedField(write_only=True, queryset= Cuenta.objects.all())
+
+    class Meta:
+        model = CuentasAsociadas
+        fields = ('id','cuenta_asociente', 'cuenta_asociada')

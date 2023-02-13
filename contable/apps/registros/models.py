@@ -4,13 +4,13 @@ from django.db import models
 # Create your models here.
 class Categoria(models.Model):
     '''Esta clase hereda de Django models.Model y crea una tabla llamada
-    tipo_entidad'''
+    categoria'''
 
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=60)   
 
     class Meta:
-        db_table = 'tipo_entidad'
+        db_table = 'categoria'
 
     def __str__(self):
         return f'{self.name}'
