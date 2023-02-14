@@ -49,7 +49,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('registros/', include('apps.registros.api.urls')), 
+    path('api/v1.0/registros/', include('apps.registros.api.urls')), # Se add para seguir el formato api/v1.0/aplicación/
     path('api-docs/swagger', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('api-docs/redoc', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
