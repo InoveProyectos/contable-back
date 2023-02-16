@@ -2,15 +2,15 @@ from django.db import models
 
 
 # Create your models here.
-class TipoEntidad(models.Model):
+class Categoria(models.Model):
     '''Esta clase hereda de Django models.Model y crea una tabla llamada
-    tipo_entidad'''
+    categoria'''
 
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=60)   
 
     class Meta:
-        db_table = 'tipo_entidad'
+        db_table = 'categoria'
 
     def __str__(self):
         return f'{self.name}'
@@ -36,14 +36,14 @@ class Entidad(models.Model):
 
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=60) 
-    tipo_entidad = models.ForeignKey(TipoEntidad, on_delete=models.CASCADE)
+    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     condicion_impositiva = models.ForeignKey(CondicionImpositiva, on_delete=models.CASCADE)
     
     class Meta:
         db_table = 'entidad'
 
     def __str__(self):
-        return f'{self.name}, {self.tipo_entidad}, {self.condicion_impositiva}'
+        return f'{self.name}, {self.categoria}, {self.condicion_impositiva}'
 
 
 class TipoIdentificacion(models.Model):
@@ -123,6 +123,23 @@ class Cuenta(models.Model):
         return f'{self.name}, {self.entidad}, {self.tipo_cuenta}, {self.moneda}'
 
 
+class Retenciones(models.Model):
+    '''Esta clase hereda de Django models.Model y crea una tabla llamada
+    retenciones'''
+
+    id = models.BigAutoField(primary_key=True)
+    cuenta = models.ForeignKey(Cuenta, on_delete=models.CASCADE)
+    valor = models.FloatField(default=0) 
+    unidad = models.CharField(max_length=10)
+    ultima_modificacion = models.DateTimeField()
+
+    class Meta:
+        db_table = 'retenciones'
+
+    def __str__(self):
+        return f'{self.cuenta}, {self.valor}, {self.unidad}, {self.ultima_modificacion}'
+
+
 class Asiento(models.Model):
     '''Esta clase hereda de Django models.Model y crea una tabla llamada
     asiento'''
@@ -157,7 +174,7 @@ class Comprobante(models.Model):
     comprobante'''
 
     id = models.BigAutoField(primary_key=True)
-    link_comprobante = models.CharField(default=None)     
+    link_comprobante = models.CharField(max_length=350, default=None)  # Add max_length
        
     class Meta:
         db_table = 'comprobante'
@@ -173,7 +190,7 @@ class Registro(models.Model):
 
     id = models.BigAutoField(primary_key=True)
     cuenta = models.ForeignKey(Cuenta, on_delete=models.CASCADE)
-    asiento = models.ForeignKey(Asiento, on_delete=models.CASCADE, default=None)
+    asiento = models.ForeignKey(Asiento, on_delete=models.CASCADE)
     numero_operacion = models.PositiveIntegerField(default="") 
     concepto = models.CharField(max_length=150)
     tipo_comprobante = models.ForeignKey(TipoComprobante, on_delete=models.CASCADE)
@@ -191,3 +208,27 @@ class Registro(models.Model):
         return f'{self.cuenta}, {self.asiento}, {self.numero_operacion}, {self.concepto},{self.tipo_comprobante}, {self.debe}, {self.haber}, {self.fecha_registro}, {self.fecha_efectiva}'
 
 
+# Tabla auxiliar, relación |muchos --> muchos|
+class CuentasAsociadas(models.Model):
+    '''Esta clase hereda de Django models.Model y crea una tabla llamada
+    cuentas_asociadas'''
+
+    id = models.BigAutoField(primary_key=True)
+    cuenta_asociente = models.ForeignKey(Cuenta, on_delete=models.CASCADE, related_name='cuenta_asociente_set') # _set debe estar siempre
+    cuenta_asociada = models.ForeignKey(Cuenta, on_delete=models.CASCADE, related_name='cuena_asociada_set')
+
+
+    def save(self, *args, **kwargs):
+        # Verificar si cuenta_asociente_id es diferente a cuenta_asociada_id
+
+        if self.cuenta_asociente != self.cuenta_asociada:
+            # Guardar los cambios
+            super().save(*args, **kwargs)
+        else:
+            raise ValueError('cuenta_asociente_id es igual a cuenta_asociada_id')
+
+    class Meta:
+        db_table = 'cuentas_asociadas'
+
+    def __str__(self):
+        return f'{self.cuenta_asociente}, {self.cuenta_asociada}'

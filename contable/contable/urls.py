@@ -14,8 +14,43 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+
+# Para swagger
+from rest_framework import permissions
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+
+description = '''
+<img src="https://lh3.googleusercontent.com/pw/AM-JKLWLct73ne_PgqQ146YMYjUgbswqg703xPZPnVImkFYwGbao5YksFGJFOlcoCJLfqIJ9_LRwFAwP9qinoEvsLx92NTOfAn54SgMLTgMvtii0r_rjneGjR53bx08OCncv4mRH4gNnpmEUuKofj59L9dAv=w1257-h103-no?authuser=0">
+</br>
+</br>
+<h2>Documentación general de APIs de la aplicación registros para modelo TipoEntidad</h2>
+<!--p>Para la autenticación por medio de TOKENS debemos agregar en el header:
+</br>
+<ul><li><b>Authorization'</b>: 'Token 92937874f377a1ea17f7637ee07208622e5cb5e6'</li></ul>
+</br>
+Donde <b>92937874f377a1ea17f7637ee07208622e5cb5e6</b> es un ejemplo del <b>Token Key</b>. 
+</p>-->
+'''
+
+schema_view = get_schema_view(
+  openapi.Info(
+     title="Inove Sistema Contable",
+     default_version='1.0.0',
+     description=description,
+     contact=openapi.Contact(email="info@inove.com.ar"),
+     license=openapi.License(name="Inove Coding School."),
+  ),
+  public=True,
+  #permission_classes=(permissions.IsAuthenticatedOrReadOnly,),
+)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1.0/registros/', include('apps.registros.api.urls')), # Se add para seguir el formato api/v1.0/aplicación/
+    path('api-docs/swagger', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('api-docs/redoc', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+
 ]

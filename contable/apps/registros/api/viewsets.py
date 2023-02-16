@@ -1,22 +1,23 @@
 # Se importa modelos
-from registros.models import *
+from ..models import *
 # Se importa serializadores
-from registros.api.serializers import *
+from .serializers import *
 # Se importa el módulo ViewSets que ofrece DRF
 from rest_framework import viewsets
+
 
 class RegistroViewSet(viewsets.ModelViewSet):
     permission_classes = [] # Falta autenticación
     serializer_class = RegistroSerializer
     queryset = serializer_class.Meta.model.objects.all()
-
-
-class TipoEntidadViewSet(viewsets.ModelViewSet):
+    
+    
+class CategoriaViewSet(viewsets.ModelViewSet):
     permission_classes = [] # Falta autenticación
-    serializer_class = TipoEntidadSerializer
+    serializer_class = CategoriaSerializer
     queryset = serializer_class.Meta.model.objects.all()
 
-
+    
 class CondicionImpositivaViewSet(viewsets.ModelViewSet):
     permission_classes = [] # Falta autenticación
     serializer_class = CondicionImpositivaSerializer
@@ -26,7 +27,7 @@ class CondicionImpositivaViewSet(viewsets.ModelViewSet):
 class EntidadViewSet(viewsets.ModelViewSet):
     permission_classes = [] # Falta autenticación
     serializer_class = EntidadSerializer
-    queryset = serializer_class.Meta.model.objects.all()
+    queryset = serializer_class.Meta.model.objects.all()  
 
 
 class TipoIdentificacionViewSet(viewsets.ModelViewSet):
@@ -75,3 +76,15 @@ class ComprobanteViewSet(viewsets.ModelViewSet):
     permission_classes = [] # Falta autenticación
     serializer_class = ComprobanteSerializer
     queryset = serializer_class.Meta.model.objects.all()
+
+class RetencionesViewSet(viewsets.ModelViewSet):
+    permission_classes = [] # Falta autenticación
+    serializer_class = RetencionesSerializer
+    queryset = serializer_class.Meta.model.objects.all()
+
+
+class CuentasAsociadasViewSet(viewsets.ModelViewSet):
+    permission_classes = [] # Falta autenticación
+    serializer_class = CuentasAsociadasSerializer
+    queryset = serializer_class.Meta.model.objects.all()
+
