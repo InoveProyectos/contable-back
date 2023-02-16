@@ -11,7 +11,7 @@ router = DefaultRouter()
 # Primer ejemplo---> GET /registros/api/tipo_entidad_vs/
 
 # Rutas que deben permitir almacenar los datos para generar una entidad
-router.register(r'crud/categoria-vs', viewset=CategoriaViewSet, basename='categoria-vs') 
+router.register(r'crud/categoria', viewset=CategoriaViewSet, basename='categoria-vs') 
 router.register(r'crud/condicion-impositiva', viewset=CondicionImpositivaViewSet, basename='condicion-impositiva') 
 
 # Rutas que deben permitir almacenar los datos para generar una cuenta
