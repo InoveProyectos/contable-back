@@ -152,10 +152,3 @@ class CuentasAsociadasAdmin(admin.ModelAdmin):
     list_display = ('id','cuenta_asociente', 'cuenta_asociada')
 
 
-    def cuenta_asociente_id(self, obj):
-        return obj.cuenta_asociente.id
-
-
-    def cuenta_asociada_id(self, obj):
-        return obj.cuenta_asociada.id
-

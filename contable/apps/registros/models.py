@@ -221,14 +221,11 @@ class CuentasAsociadas(models.Model):
     def save(self, *args, **kwargs):
         # Verificar si cuenta_asociente_id es diferente a cuenta_asociada_id
 
-        try:      
-            if self.cuenta_asociente != self.cuenta_asociada:
-                # Guardar los cambios
-                super().save(*args, **kwargs)  
-
-        except ValueError:
-            print('cuenta_asociente_id es igual a cuenta_asociada_id')
-            raise
+        if self.cuenta_asociente != self.cuenta_asociada:
+            # Guardar los cambios
+            super().save(*args, **kwargs)
+        else:
+            raise ValueError('cuenta_asociente_id es igual a cuenta_asociada_id')
 
     class Meta:
         db_table = 'cuentas_asociadas'
