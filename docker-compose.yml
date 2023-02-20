@@ -1,0 +1,14 @@
+version: "3.1"
+
+services:
+  back:
+    build: .
+    image: contable-back:latest
+    container_name: contable-back
+    restart: always
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./contable:/contable/back
+      - ./db:/contable/db
+    ports:
+      - "8070:8000"
