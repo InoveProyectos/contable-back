@@ -23,12 +23,6 @@ class EntidadAdmin(admin.ModelAdmin):
                   'categoria', 
                   'condicion_impositiva')
 
-    def categoria_id(self, obj):
-        return obj.categoria.id
-        
-    def condicion_impositiva_id(self, obj):
-        return obj.condicion_impositiva.id
-
 
 @admin.register(TipoIdentificacion)
 class TipoIdentificacionAdmin(admin.ModelAdmin):
@@ -43,13 +37,7 @@ class IdentificacionAdmin(admin.ModelAdmin):
                   'identificador',
                   'tipo_identificacion', 
                   'entidad')
-
-    def tipo_identificacion_id(self, obj):
-        return obj.tipo_identificacion.id
-        
-    def entidad_id(self, obj):
-        return obj.entidad.id
-   
+ 
 
 @admin.register(TipoCuenta)
 class TipoCuentaAdmin(admin.ModelAdmin):
@@ -71,15 +59,6 @@ class CuentaAdmin(admin.ModelAdmin):
                   'entidad', 
                   'tipo_cuenta',
                   'moneda')
-
-    def entidad_id(self, obj):
-        return obj.entidad.id
-
-    def tipo_cuenta_id(self, obj):
-        return obj.tipo_cuenta.id
-
-    def moneda_id(self, obj):
-        return obj.moneda.id
     
 
 @admin.register(Retenciones)
@@ -90,9 +69,6 @@ class RetencionesAdmin(admin.ModelAdmin):
                   'valor', 
                   'unidad',
                   'ultima_modificacion')
-
-    def cuenta_id(self, obj):
-        return obj.cuenta.id
 
 
 @admin.register(Asiento)
@@ -128,22 +104,6 @@ class RegistroAdmin(admin.ModelAdmin):
                   'fecha_efectiva', 
                   'comprobante', 
                   'observaciones')
-
-
-    def cuenta_id(self, obj):
-        return obj.cuenta.id
-
-
-    def asiento_id(self, obj):
-        return obj.asiento.id
-
-
-    def tipo_comprobante_id(self, obj):
-        return obj.tipo_comprobante.id
-
-
-    def comprobante_id(self, obj):
-        return obj.comprobante.id
 
 
 @admin.register(CuentasAsociadas)
