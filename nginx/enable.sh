@@ -1,7 +1,2 @@
-if [[ $# -ne 1 ]]; then
-    echo "Ingrese el entorno a habilitar"
-    exit 2
-fi
-
-ln -sf $(dirname -- "$(realpath -- $0;)";)/$1 /etc/nginx/sites-enabled/$1
+ln -sf $(dirname -- "$(realpath -- $0;)";)/contable /etc/nginx/sites-enabled/contable
 sudo systemctl restart nginx.service

@@ -11,4 +11,4 @@ services:
       - ./contable:/contable/back
       - ./db:/contable/db
     ports:
-      - "8070:8000"
+      - "8000:8000"
