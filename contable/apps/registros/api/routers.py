@@ -23,5 +23,7 @@ router.register(r'crud/moneda', viewset=MonedaViewSet, basename='moneda')
 router.register(r'crud/cuenta', viewset=CuentaViewSet, basename='cuenta') 
 router.register(r'crud/cuentas-asociadas', viewset=CuentasAsociadasViewSet, basename='cuentas-asociadas') 
 
+# Ruta que debe permitir almacenar los datos para registro
+router.register(r'crud/registro', viewset=RegistroViewSet, basename='registro') 
 
 urlpatterns = router.urls
