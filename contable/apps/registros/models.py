@@ -2,15 +2,15 @@ from django.db import models
 
 
 # Create your models here.
-class Categoria(models.Model):
+class Personeria(models.Model):
     '''Esta clase hereda de Django models.Model y crea una tabla llamada
-    categoria'''
+    personaria'''
 
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=60)   
 
     class Meta:
-        db_table = 'categoria'
+        db_table = 'personeria'
 
     def __str__(self):
         return f'{self.name}'
@@ -36,14 +36,14 @@ class Entidad(models.Model):
 
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=60) 
-    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
+    personeria = models.ForeignKey(Personeria, on_delete=models.CASCADE)
     condicion_impositiva = models.ForeignKey(CondicionImpositiva, on_delete=models.CASCADE)
     
     class Meta:
         db_table = 'entidad'
 
     def __str__(self):
-        return f'{self.name}, {self.categoria}, {self.condicion_impositiva}'
+        return f'{self.name}, {self.personeria}, {self.condicion_impositiva}'
 
 
 class TipoIdentificacion(models.Model):
@@ -77,15 +77,20 @@ class Identificacion(models.Model):
         return f'{self.identificador}, {self.tipo_identificacion}, {self.entidad}'
 
 
-class TipoCuenta(models.Model):
+class Categoria(models.Model):
     '''Esta clase hereda de Django models.Model y crea una tabla llamada
-    tipo_cuenta'''
+    categoria: 
+                Alumno
+                Empleado
+                Banco
+                Proveedor
+    '''
 
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=60)   
 
     class Meta:
-        db_table = 'tipo_cuenta'
+        db_table = 'categoria'
 
     def __str__(self):
         return f'{self.name}'
@@ -105,7 +110,7 @@ class Moneda(models.Model):
         return f'{self.denominacion}'
 
 
-# Clase que tiene foreingkey de la clase Entidad, TipoCuenta y Moneda.
+# Clase que tiene foreingkey de la clase Entidad, Categoria y Moneda.
 class Cuenta(models.Model):
     '''Esta clase hereda de Django models.Model y crea una tabla llamada
     cuenta'''
@@ -113,14 +118,14 @@ class Cuenta(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=60)     
     entidad = models.ForeignKey(Entidad, on_delete=models.CASCADE)
-    tipo_cuenta = models.ForeignKey(TipoCuenta, on_delete=models.CASCADE)
+    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     moneda = models.ForeignKey(Moneda, on_delete=models.CASCADE)
    
     class Meta:
         db_table = 'cuenta'
 
     def __str__(self):
-        return f'{self.name}, {self.entidad}, {self.tipo_cuenta}, {self.moneda}'
+        return f'{self.name}, {self.entidad}, {self.categoria}, {self.moneda}'
 
 
 class Retenciones(models.Model):

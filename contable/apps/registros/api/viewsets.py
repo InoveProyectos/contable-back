@@ -4,17 +4,56 @@ from ..models import *
 from .serializers import *
 # Se importa el módulo ViewSets que ofrece DRF
 from rest_framework import viewsets
+from rest_framework.decorators import action
 
 
 class RegistroViewSet(viewsets.ModelViewSet):
     permission_classes = [] # Falta autenticación
     serializer_class = RegistroSerializer
     queryset = serializer_class.Meta.model.objects.all()
+
+
+    def get_serializer_class(self):
+        if self.action == 'registro':
+            return RegistroSerializer
+        
+        if self.action == 'asiento_registro':
+            return RegistroAsientoSerializer
+        
+        else:
+            return self.serializer_class
+
+    # action, permite marcar acciones adicionales para el enrutamiento.
+    # Cuando se haga un post desde la url_path indicado recibir por request los datos
+    # ¿Cómo asignar un valor a asiento?
+    @action(detail=True,methods=['post'], url_path='asiento_registro', permission_classes = [])
+    def asiento_registro(self, request, pk:int):
+        data = {'id':pk, 
+                  'cuenta':request.data.get("cuenta"),
+                  'asiento':request.data.get("asiento"), 
+                  'numero_operacion':request.data.get("numero_operacion"),  
+                  'concepto':request.data.get("concepto"), 
+                  'tipo_comprobante':request.data.get("tipo_comprobante"), 
+                  'debe':request.data.get("debe"), 
+                  'haber':request.data.get("habe"), 
+                  'fecha_registro':request.data.get("fecha_registro"), 
+                  'fecha_efectiva':request.data.get("fecha_efectiva"), 
+                  'comprobante':request.data.get("comprobante"), 
+                  'observaciones':request.data.get("observaciones")}
+        
+        # Serializar la data recibida
+        serializer = self.get_serializer_class()(data=data)
+        # Verificar si la serialización en válida.
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+       
+        return Response(data, status=status.HTTP_200_OK)
+  
     
     
-class CategoriaViewSet(viewsets.ModelViewSet):
+class PersoneriaViewSet(viewsets.ModelViewSet):
     permission_classes = [] # Falta autenticación
-    serializer_class = CategoriaSerializer
+    serializer_class = PersoneriaSerializer
     queryset = serializer_class.Meta.model.objects.all()
 
     
@@ -42,9 +81,9 @@ class IdentificacionViewSet(viewsets.ModelViewSet):
     queryset = serializer_class.Meta.model.objects.all()
 
 
-class TipoCuentaViewSet(viewsets.ModelViewSet):
+class CategoriaViewSet(viewsets.ModelViewSet):
     permission_classes = [] # Falta autenticación
-    serializer_class = TipoCuentaSerializer
+    serializer_class = CategoriaSerializer
     queryset = serializer_class.Meta.model.objects.all()
 
 
