@@ -92,9 +92,9 @@ class MonedaSerializer(serializers.ModelSerializer):
     
 class CuentaSerializer(serializers.ModelSerializer):
     #Atributos relacionados, cuyos valores representan un foreingkey
-    entidad = serializers.PrimaryKeyRelatedField(write_only=True, queryset= Entidad.objects.all())
-    categoria = serializers.PrimaryKeyRelatedField(write_only=True, queryset= Categoria.objects.all())
-    moneda = serializers.PrimaryKeyRelatedField(write_only=True, queryset= Moneda.objects.all())
+    entidad = serializers.PrimaryKeyRelatedField(queryset= Entidad.objects.all())
+    categoria = serializers.PrimaryKeyRelatedField(queryset= Categoria.objects.all())
+    moneda = serializers.PrimaryKeyRelatedField(queryset= Moneda.objects.all())
     
     class Meta:
         model = Cuenta
