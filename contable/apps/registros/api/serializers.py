@@ -29,31 +29,6 @@ class RegistroSerializer(serializers.ModelSerializer):
                   'observaciones')
         
 
-class RegistroAsientoSerializer(serializers.ModelSerializer):
-    #Atributos relacionados, cuyos valores representan un foreingkey
-    cuenta = serializers.PrimaryKeyRelatedField(write_only=True, queryset= Cuenta.objects.all())
-    #asiento = serializers.PrimaryKeyRelatedField(write_only=True, queryset= Asiento.objects.all())
-    tipo_comprobante = serializers.PrimaryKeyRelatedField(write_only=True, queryset= TipoComprobante.objects.all())
-    comprobante = serializers.PrimaryKeyRelatedField(write_only=True, queryset= Comprobante.objects.all())
-
-
-    class Meta:
-        model = Registro
-        fields = ('id', 
-                  'cuenta',
-                  'asiento', 
-                  'numero_operacion',  
-                  'concepto', 
-                  'tipo_comprobante', 
-                  'debe', 
-                  'haber', 
-                  'fecha_registro', 
-                  'fecha_efectiva', 
-                  'comprobante', 
-                  'observaciones')
-
-
-
 class PersoneriaSerializer(serializers.ModelSerializer):
 
     class Meta:
