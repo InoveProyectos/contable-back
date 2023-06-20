@@ -24,7 +24,6 @@ router.register(r'crud/cuenta', viewset=CuentaViewSet, basename='cuenta')
 
 # Ruta que debe permitir almacenar los datos para registro
 router.register(r'crud/registro', viewset=RegistroViewSet, basename='registro') 
-router.register(r'asiento/registro', viewset=RegistroViewSet, basename='asiento_registro')
 
 # Ruta que debe permitir crear un asiento
 router.register(r'crud/asiento', viewset=AsientoViewSet, basename='asiento') 
