@@ -30,53 +30,70 @@ def sumatoria(entrada):
     return total_entrada
 
 
-def insert(entrada,fecha_registro,asiento):
+def insert(entrada,fecha_registro,asiento, ingreso):
     """ Recibe  como entrada(debe o haber), fecha de registro y el objeto asiento
         informa con Http si fue creado 
     """
     try:
-        for i in range(len(entrada)):    
-            #cuenta = Cuenta.objects.filter(id=int(entrada[i]["cuenta_id"]))   
-            #if cuenta.exists()==True:  
-            if entrada[i].get("tipo_comprobante")=="Null" and entrada[i].get("comprobante")=="Null":
-                comprobante = Comprobante.objects.create(link_comprobante="")
-                tipo_comprobante = TipoComprobante.objects.create(name="")
+        
+        for i in range(len(entrada)):  
+            cuenta = Cuenta.objects.filter(id=int(entrada[i]["cuenta_id"])).first()
+            
+            if cuenta.id:  
                 
-                data = {"cuenta":entrada[i].get("cuenta_id"),
-                        "asiento": asiento.id,
-                        "numero_operacion": entrada[i].get("numero_operacion"),
-                        "concepto": entrada[i]["concepto"],
-                        "tipo_comprobante": tipo_comprobante.id,
-                        "debe": float(entrada[i].get("debe",0)),
-                        "haber": float(entrada[i].get("haber",0)),
-                        "fecha_registro": fecha_registro,
-                        "fecha_efectiva": entrada[i].get("fecha_efectiva",fecha_registro),
-                        "comprobante": comprobante.id,
-                        "observaciones": str(entrada[i].get("observaciones",''))}
+                if entrada[i].get("tipo_comprobante")==None and entrada[i].get("comprobante")==None:
+                    # Se crean 
+                    comprobante = Comprobante.objects.create(link_comprobante="")
+                    comprobante.save()
+                    tipo_comprobante = TipoComprobante.objects.create(name="")
+                    tipo_comprobante.save()
+                    
+                    # Se consultan
+                    comprobante = Comprobante.objects.filter(link_comprobante=comprobante.link_comprobante).first()
+                    tipo_comprobante = TipoComprobante.objects.filter(name=tipo_comprobante.name).first()
                 
-                serializer = RegistroSerializer(data=data)
-                if serializer.is_valid(raise_exception=True):
-                    registro = serializer.save()
-                
+                    # Verificación de la fecha efectiva, que no sea None ni vacía.
+                    if entrada[i].get("fecha_efectiva")==None or entrada[i].get("fecha_efectiva")=="":
+                        fecha_efectiva = fecha_registro
+                    else:
+                        fecha_efectiva = entrada[i].get("fecha_efectiva")
+                    
+                    
+                    # Si el debe trae una cantidad
+                    monto = float(entrada[i].get("monto"))
+                    ingreso_debe = None
+                    ingreso_haber = None
+
+                    if monto != None and ingreso == "debe":
+                        ingreso_debe = monto
+                        ingreso_haber = 0
+
+                    elif monto != None and ingreso == "haber":
+                        ingreso_debe = 0
+                        ingreso_haber = monto
+                        
+                    
                     registro = Registro.objects.create(
-                                        cuenta = entrada[i].get("cuenta_id"),
-                                        asiento = asiento.id,
+                                        cuenta = cuenta,
+                                        asiento = asiento,
                                         numero_operacion = entrada[i].get("numero_operacion"),
                                         concepto = entrada[i]["concepto"],
-                                        tipo_comprobante = tipo_comprobante.id,
-                                        debe = float(entrada[i].get("debe",0)),
-                                        haber = float(entrada[i].get("haber",0)),
+                                        tipo_comprobante = tipo_comprobante,
+                                        debe = ingreso_debe,
+                                        haber = ingreso_haber,
                                         fecha_registro = fecha_registro,
-                                        fecha_efectiva = entrada[i].get("fecha_efectiva",fecha_registro),
-                                        comprobante = comprobante.id,
+                                        fecha_efectiva = fecha_efectiva,
+                                        comprobante = comprobante,
                                         observaciones = str(entrada[i].get("observaciones",'')),    
                                     )
                     registro.save()
-                    return JsonResponse({}, status=status.HTTP_200_OK, safe=False)
-           
+                    
+                
+            else: 
+                print("El id ingresado no existe")
+                return JsonResponse({}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
             
     except Exception as e:
-        print(type(e).__name__)
         return JsonResponse(e, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 
@@ -90,7 +107,7 @@ class RegistroAsientoAPIView(APIView):
         Ingresar monto en Registro
         debe: destino del dinero
         haber: origen del dinero
-        Esquema de entrada:
+        Ejemplo de esquema de entrada:
         {"fecha_registro":"19/06/2023",
         "debe":[{"cuenta_id": 2, "concepto": "transferecia pago curso PI cuota 1", "numero_operacion": "cuota1", "monto": 500.50, "fecha_efectiva": ""}, {"cuenta_id": 2, "concepto": "Transferecia pago curso PI cuota 2", "numero_operacion": "cuota1","monto": 100,"fecha_efectiva": ""}],
         "haber":[{"cuenta_id": 5,"concepto": "Ingreso en banco","numero_operacion": "BBVA45068","monto": 500.50,"fecha_efectiva": ""},
@@ -101,7 +118,7 @@ class RegistroAsientoAPIView(APIView):
     parser_classes = (JSONParser,)
     
     def post(self, request):
-        user_data = {}
+        
         try:
             # Obtenemos los datos del request:
             # fecha_registro = request.data['fecha_registro']
@@ -110,7 +127,7 @@ class RegistroAsientoAPIView(APIView):
             haber= json.dumps(request.data["haber"])
             debe=json.loads(debe)                   # Transforma a dict
             haber=json.loads(haber)   
-            fecha_registro = json.loads(fecha_registro).split("/")              
+            fecha_registro = json.loads(fecha_registro)        
 
             if len(debe) != 0 and len(haber)!= 0:
                               
@@ -118,23 +135,28 @@ class RegistroAsientoAPIView(APIView):
                 total_haber = sumatoria(haber)       
                 
                 resultado = total_debe - total_haber
-                if resultado == 0 and int(debe[0]["cuenta_id"]) != None and int(haber[0]["cuenta_id"]) != True:
+                if resultado == 0 and int(debe[0]["cuenta_id"]) != None and int(haber[0]["cuenta_id"]) != None:
                     # 1)Insertar un nuevo asiento (crear un nuevo, y quedarnos con 
                     # el objeto para usar su ID)
-                    fecha_registro = datetime(day=int(fecha_registro[0]), month=int(fecha_registro[1]),year=int(fecha_registro[2]),tzinfo=pytz.UTC)
-                                    
-                    asiento = Asiento.objects.create(
-                        fecha_registro = fecha_registro,
-                    )
-                    asiento.save()
-                    insert(debe,fecha_registro,asiento)
-                    insert(haber,fecha_registro,asiento)
+                    # Convierte la fecha str en un objeto datetime
+                    fecha_registro = datetime.strptime(fecha_registro, "%d/%m/%Y")
+                    print("fecha_registro",fecha_registro)
                     
-                    return JsonResponse(data={}, status=status.HTTP_200_OK)                   
+                    # Crea el asiento
+                    asiento_create = Asiento.objects.create(
+                        fecha_registro = fecha_registro,
+                        )
+                    asiento_create.save()
+
+                    asiento = Asiento.objects.filter(fecha_registro = fecha_registro).first()
+                    insert(debe,fecha_registro,asiento, "debe")
+                    insert(haber,fecha_registro,asiento, "haber")
+                    
+                                        
+                    return JsonResponse(data={}, status=status.HTTP_200_OK)                  
                     
            
         except Exception as error:
             # Si aparece alguna excepción, devolvemos un mensaje de error
-            error['response'] = "Error la resta del total de debe y haber no es igual a cero."
             return JsonResponse(error, status=status.HTTP_400_BAD_REQUEST, safe=False, template_name=None, content_type=None)
     
