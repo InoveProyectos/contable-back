@@ -125,7 +125,7 @@ class Cuenta(models.Model):
         db_table = 'cuenta'
 
     def __str__(self):
-        return f'{self.name}, {self.entidad}, {self.categoria}, {self.moneda}'
+        return f'{self.id},{self.name}, {self.entidad}, {self.categoria}, {self.moneda}'
 
 
 class Retenciones(models.Model):
@@ -165,7 +165,7 @@ class TipoComprobante(models.Model):
     tipo_comprobante'''
 
     id = models.BigAutoField(primary_key=True)
-    name = models.CharField(max_length=60)     
+    name = models.CharField(max_length=60, default=None, blank=True, null=True)     
        
     class Meta:
         db_table = 'tipo_comprobante'
@@ -179,7 +179,7 @@ class Comprobante(models.Model):
     comprobante'''
 
     id = models.BigAutoField(primary_key=True)
-    link_comprobante = models.CharField(max_length=350, default=None)  # Add max_length
+    link_comprobante = models.CharField(max_length=350, default=None, blank=True, null=True)  # Add max_length
        
     class Meta:
         db_table = 'comprobante'
@@ -196,16 +196,16 @@ class Registro(models.Model):
     id = models.BigAutoField(primary_key=True)
     cuenta = models.ForeignKey(Cuenta, on_delete=models.CASCADE)
     asiento = models.ForeignKey(Asiento, on_delete=models.CASCADE)
-    numero_operacion = models.PositiveIntegerField(default="") 
+    numero_operacion = models.CharField(max_length=100, default="") 
     concepto = models.CharField(max_length=150)
-    tipo_comprobante = models.ForeignKey(TipoComprobante, on_delete=models.CASCADE, default=None, blank=True)
+    tipo_comprobante = models.ForeignKey(TipoComprobante, on_delete=models.CASCADE, default=None, blank=True, null=True)
     debe = models.FloatField(default=0)
     haber = models.FloatField(default=0)
     fecha_registro = models.DateTimeField()
     fecha_efectiva = models.DateTimeField()
-    comprobante = models.ForeignKey(Comprobante, on_delete=models.CASCADE, default=None, blank=True)    
+    comprobante = models.ForeignKey(Comprobante, on_delete=models.CASCADE, default=None, blank=True, null=True)    
     observaciones = models.CharField(max_length=300, default='')        
-
+     
     class Meta:
         db_table = 'registro'
 

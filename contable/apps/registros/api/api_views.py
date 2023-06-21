@@ -6,6 +6,7 @@ from rest_framework import status
 import json
 from datetime import datetime
 import pytz
+from ..api.serializers import *
 
 
 
@@ -34,26 +35,48 @@ def insert(entrada,fecha_registro,asiento):
         informa con Http si fue creado 
     """
     try:
-        for i in range(len(entrada)):
-            Registro.objects.create(
-                                cuenta = int(entrada[i]["cuenta_id"]),
-                                asiento = asiento.id,
-                                numero_operacion = entrada[i].get("numero_operacion"),
-                                concepto = entrada[i]["concepto"],
-                                #tipo_comprobante = entrada[i][""],
-                                debe = float(entrada[i].get("debe",0)),
-                                haber = float(entrada[i].get("haber",0)),
-                                fecha_registro = fecha_registro,
-                                fecha_efectiva = entrada[i].get("fecha_efectiva",fecha_registro),
-                                #comprobante = entrada[i][""],
-                                observaciones = str(entrada[i].get("observaciones",'')),    
-                            )
-        
-        return JsonResponse({}, status=status.HTTP_200_OK)
-
+        for i in range(len(entrada)):    
+            #cuenta = Cuenta.objects.filter(id=int(entrada[i]["cuenta_id"]))   
+            #if cuenta.exists()==True:  
+            if entrada[i].get("tipo_comprobante")=="Null" and entrada[i].get("comprobante")=="Null":
+                comprobante = Comprobante.objects.create(link_comprobante="")
+                tipo_comprobante = TipoComprobante.objects.create(name="")
+                
+                data = {"cuenta":entrada[i].get("cuenta_id"),
+                        "asiento": asiento.id,
+                        "numero_operacion": entrada[i].get("numero_operacion"),
+                        "concepto": entrada[i]["concepto"],
+                        "tipo_comprobante": tipo_comprobante.id,
+                        "debe": float(entrada[i].get("debe",0)),
+                        "haber": float(entrada[i].get("haber",0)),
+                        "fecha_registro": fecha_registro,
+                        "fecha_efectiva": entrada[i].get("fecha_efectiva",fecha_registro),
+                        "comprobante": comprobante.id,
+                        "observaciones": str(entrada[i].get("observaciones",''))}
+                
+                serializer = RegistroSerializer(data=data)
+                if serializer.is_valid(raise_exception=True):
+                    registro = serializer.save()
+                
+                    registro = Registro.objects.create(
+                                        cuenta = entrada[i].get("cuenta_id"),
+                                        asiento = asiento.id,
+                                        numero_operacion = entrada[i].get("numero_operacion"),
+                                        concepto = entrada[i]["concepto"],
+                                        tipo_comprobante = tipo_comprobante.id,
+                                        debe = float(entrada[i].get("debe",0)),
+                                        haber = float(entrada[i].get("haber",0)),
+                                        fecha_registro = fecha_registro,
+                                        fecha_efectiva = entrada[i].get("fecha_efectiva",fecha_registro),
+                                        comprobante = comprobante.id,
+                                        observaciones = str(entrada[i].get("observaciones",'')),    
+                                    )
+                    registro.save()
+                    return JsonResponse({}, status=status.HTTP_200_OK, safe=False)
+           
             
     except Exception as e:
-        #print(type(e).__name__)
+        print(type(e).__name__)
         return JsonResponse(e, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 
@@ -103,21 +126,15 @@ class RegistroAsientoAPIView(APIView):
                     asiento = Asiento.objects.create(
                         fecha_registro = fecha_registro,
                     )
-                    
+                    asiento.save()
                     insert(debe,fecha_registro,asiento)
                     insert(haber,fecha_registro,asiento)
                     
                     return JsonResponse(data={}, status=status.HTTP_200_OK)                   
                     
-            else:
-                user_data['response'] = "Error la resta del total de debe y haber no es igual a cero."
-                return JsonResponse(user_data, status=status.HTTP_400_BAD_REQUEST,safe=False, template_name=None, content_type=None)
-
-        
+           
         except Exception as error:
             # Si aparece alguna excepción, devolvemos un mensaje de error
+            error['response'] = "Error la resta del total de debe y haber no es igual a cero."
             return JsonResponse(error, status=status.HTTP_400_BAD_REQUEST, safe=False, template_name=None, content_type=None)
-    
-    
-
     
