@@ -38,56 +38,41 @@ def insert(entrada,fecha_registro,asiento, ingreso):
         
         for i in range(len(entrada)):  
             cuenta = Cuenta.objects.filter(id=int(entrada[i]["cuenta_id"])).first()
-            
-            if cuenta.id:  
-                
-                if entrada[i].get("tipo_comprobante")==None and entrada[i].get("comprobante")==None:
-                    # Se crean 
-                    comprobante = Comprobante.objects.create(link_comprobante="")
-                    comprobante.save()
-                    tipo_comprobante = TipoComprobante.objects.create(name="")
-                    tipo_comprobante.save()
-                    
-                    # Se consultan
-                    comprobante = Comprobante.objects.filter(link_comprobante=comprobante.link_comprobante).first()
-                    tipo_comprobante = TipoComprobante.objects.filter(name=tipo_comprobante.name).first()
-                
-                    # Verificación de la fecha efectiva, que no sea None ni vacía.
-                    if entrada[i].get("fecha_efectiva")==None or entrada[i].get("fecha_efectiva")=="":
-                        fecha_efectiva = fecha_registro
-                    else:
-                        fecha_efectiva = entrada[i].get("fecha_efectiva")
-                    
-                    
-                    # Si el debe trae una cantidad
-                    monto = float(entrada[i].get("monto"))
-                    ingreso_debe = None
-                    ingreso_haber = None
-
-                    if monto != None and ingreso == "debe":
-                        ingreso_debe = monto
-                        ingreso_haber = 0
-
-                    elif monto != None and ingreso == "haber":
-                        ingreso_debe = 0
-                        ingreso_haber = monto
                         
+            if cuenta.id:                 
+                # Verificación de la fecha efectiva, que no sea None ni vacía.
+                if entrada[i].get("fecha_efectiva")==None or entrada[i].get("fecha_efectiva")=="":
+                    fecha_efectiva = fecha_registro
+                else:
+                    fecha_efectiva = entrada[i].get("fecha_efectiva")
+                
+                # Si el debe trae una cantidad
+                monto = float(entrada[i].get("monto"))
+                ingreso_debe = None
+                ingreso_haber = None
+
+                if monto != None and ingreso == "debe":
+                    ingreso_debe = monto
+                    ingreso_haber = 0
+
+                elif monto != None and ingreso == "haber":
+                    ingreso_debe = 0
+                    ingreso_haber = monto
                     
-                    registro = Registro.objects.create(
-                                        cuenta = cuenta,
-                                        asiento = asiento,
-                                        numero_operacion = entrada[i].get("numero_operacion"),
-                                        concepto = entrada[i]["concepto"],
-                                        tipo_comprobante = tipo_comprobante,
-                                        debe = ingreso_debe,
-                                        haber = ingreso_haber,
-                                        fecha_registro = fecha_registro,
-                                        fecha_efectiva = fecha_efectiva,
-                                        comprobante = comprobante,
-                                        observaciones = str(entrada[i].get("observaciones",'')),    
-                                    )
-                    registro.save()
-                    
+                registro = Registro.objects.create(
+                                    cuenta = cuenta,
+                                    asiento = asiento,
+                                    numero_operacion = entrada[i].get("numero_operacion"),
+                                    concepto = entrada[i]["concepto"],
+                                    tipo_comprobante = entrada[i].get("tipo_comprobante") ,
+                                    debe = ingreso_debe,
+                                    haber = ingreso_haber,
+                                    fecha_registro = fecha_registro,
+                                    fecha_efectiva = fecha_efectiva,
+                                    comprobante = entrada[i].get("comprobante"),
+                                    observaciones = str(entrada[i].get("observaciones",'')),    
+                                )
+                registro.save()
                 
             else: 
                 print("El id ingresado no existe")
