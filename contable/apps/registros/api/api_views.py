@@ -40,7 +40,7 @@ def insert(entrada,fecha_registro,asiento, ingreso):
 
             if cuenta.id:                 
                 # Verificación de la fecha efectiva, que no sea None ni vacía.
-                if entrada[i].get("fecha_efectiva")==None or entrada[i].get("fecha_efectiva")=="":
+                if entrada[i].get("fecha_efectiva") is None or entrada[i].get("fecha_efectiva") == "":
                     fecha_efectiva = fecha_registro
                 else:
                     fecha_efectiva = entrada[i].get("fecha_efectiva")
@@ -50,11 +50,11 @@ def insert(entrada,fecha_registro,asiento, ingreso):
                 ingreso_debe = None
                 ingreso_haber = None
 
-                if monto != None and ingreso == "debe":
+                if monto is not None and ingreso == "debe":
                     ingreso_debe = monto
                     ingreso_haber = 0
 
-                elif monto != None and ingreso == "haber":
+                elif monto is not None and ingreso == "haber":
                     ingreso_debe = 0
                     ingreso_haber = monto
                     
@@ -114,7 +114,7 @@ class RegistroAsientoAPIView(APIView):
                 total_haber = sumatoria(haber)       
                 
                 resultado = total_debe - total_haber
-                if resultado == 0 and int(debe[0]["cuenta_id"]) != None and int(haber[0]["cuenta_id"]) != None:
+                if resultado == 0 and int(debe[0]["cuenta_id"]) is not None and int(haber[0]["cuenta_id"]) is not None:
                     # 1)Insertar un nuevo asiento (crear un nuevo, y quedarnos con 
                     # el objeto para usar su ID)
                     # Convierte la fecha str en un objeto datetime
