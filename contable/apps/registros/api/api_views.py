@@ -80,19 +80,33 @@ def insert(entrada,fecha_registro,asiento, ingreso):
 class RegistroAsientoAPIView(APIView):
     """ 
         Vista de API personalizada para recibir peticiones de tipo POST.
+        Ejemplo de esquema de entrada:
+        {
+            "fecha_registro":"19/06/2023",
+            "debe":[
+                {
+                    "cuenta_id": 1,
+                    "concepto": "Transferecia pago curso PI cuota 1",
+                    "numero_operacion": "cuota1",
+                    "monto": 500.50,
+                },
+                ],
+            "haber":[
+                {
+                    "cuenta_id": 2,
+                    "concepto": "Ingreso en banco",
+                    "numero_operacion": "BBVA45068",
+                    "monto": 500.50,
+                },
+            ]
+        }
         NOTE: no puede generar un origen sin destino, ni lo contrario.
         debe- haber = 0, si se cumple se hace un registro sino informar el error  
         Bucle que reste total debe y total haber.
 
         Ingresar monto en Registro
         debe: destino del dinero
-        haber: origen del dinero
-        Ejemplo de esquema de entrada:
-        {"fecha_registro":"19/06/2023",
-        "debe":[{"cuenta_id": 2, "concepto": "transferecia pago curso PI cuota 1", "numero_operacion": "cuota1", "monto": 500.50, "fecha_efectiva": ""}, {"cuenta_id": 2, "concepto": "Transferecia pago curso PI cuota 2", "numero_operacion": "cuota1","monto": 100,"fecha_efectiva": ""}],
-        "haber":[{"cuenta_id": 5,"concepto": "Ingreso en banco","numero_operacion": "BBVA45068","monto": 500.50,"fecha_efectiva": ""},
-        {"cuenta_id": 5,"concepto": "Ingreso en banco","numero_operacion": "BBVA45068","monto": 100,"fecha_efectiva": ""}]
-        }      
+        haber: origen del dinero   
     """
     
     parser_classes = (JSONParser,)
