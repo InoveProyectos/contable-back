@@ -35,10 +35,9 @@ def insert(entrada,fecha_registro,asiento, ingreso):
         informa con Http si fue creado 
     """
     try:
-        
-        for i in range(len(entrada)):  
+        for i in range(len(entrada)):
             cuenta = Cuenta.objects.filter(id=int(entrada[i]["cuenta_id"])).first()
-                        
+
             if cuenta.id:                 
                 # Verificación de la fecha efectiva, que no sea None ni vacía.
                 if entrada[i].get("fecha_efectiva")==None or entrada[i].get("fecha_efectiva")=="":
@@ -106,16 +105,11 @@ class RegistroAsientoAPIView(APIView):
         
         try:
             # Obtenemos los datos del request:
-            # fecha_registro = request.data['fecha_registro']
-            fecha_registro= json.dumps(request.data["fecha_registro"])
-            debe= json.dumps(request.data["debe"])  # Transforma a string
-            haber= json.dumps(request.data["haber"])
-            debe=json.loads(debe)                   # Transforma a dict
-            haber=json.loads(haber)   
-            fecha_registro = json.loads(fecha_registro)        
+            debe = request.data["debe"]
+            haber = request.data["haber"]
+            fecha_registro = request.data["fecha_registro"]
 
             if len(debe) != 0 and len(haber)!= 0:
-                              
                 total_debe = sumatoria(debe)
                 total_haber = sumatoria(haber)       
                 
@@ -138,7 +132,7 @@ class RegistroAsientoAPIView(APIView):
                     insert(haber,fecha_registro,asiento, "haber")
                     
                                         
-                    return JsonResponse(data={}, status=status.HTTP_200_OK)                  
+                    return JsonResponse(data={}, status=status.HTTP_200_OK)
                     
            
         except Exception as error:
