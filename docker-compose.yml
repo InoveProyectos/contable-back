@@ -5,7 +5,6 @@ services:
     build: .
     image: contable-back:latest
     container_name: contable-back
-    restart: always
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./contable:/contable/back
