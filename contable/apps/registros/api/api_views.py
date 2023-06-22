@@ -99,7 +99,7 @@ class RegistroAsientoAPIView(APIView):
                     "monto": 500.50,
                 },
             ]
-        }
+        } 
         NOTE: no puede generar un origen sin destino, ni lo contrario.
         debe- haber = 0, si se cumple se hace un registro sino informar el error  
         Bucle que reste total debe y total haber.
