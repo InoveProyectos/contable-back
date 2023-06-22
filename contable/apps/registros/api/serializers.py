@@ -27,13 +27,12 @@ class RegistroSerializer(serializers.ModelSerializer):
                   'fecha_efectiva', 
                   'comprobante', 
                   'observaciones')
+        
 
-
-
-class CategoriaSerializer(serializers.ModelSerializer):
+class PersoneriaSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Categoria
+        model = Personeria
         fields = ('id','name')
 
     
@@ -46,14 +45,14 @@ class CondicionImpositivaSerializer(serializers.ModelSerializer):
 
 class EntidadSerializer(serializers.ModelSerializer):
     #Atributos relacionados, cuyos valores representan un foreingkey
-    categoria = serializers.PrimaryKeyRelatedField(write_only=True, queryset= Categoria.objects.all())
+    personeria = serializers.PrimaryKeyRelatedField(write_only=True, queryset= Personeria.objects.all())
     condicion_impositiva = serializers.PrimaryKeyRelatedField(write_only=True, queryset= CondicionImpositiva.objects.all())
     
     class Meta:
         model = Entidad
         fields = ('id', 
                   'name',
-                  'categoria', 
+                  'personeria', 
                   'condicion_impositiva')
 
 
@@ -77,10 +76,10 @@ class IdentificacionSerializer(serializers.ModelSerializer):
                   'entidad')
 
 
-class TipoCuentaSerializer(serializers.ModelSerializer):
+class CategoriaSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = TipoCuenta
+        model = Categoria
         fields = ('id','name')
 
     
@@ -93,16 +92,16 @@ class MonedaSerializer(serializers.ModelSerializer):
     
 class CuentaSerializer(serializers.ModelSerializer):
     #Atributos relacionados, cuyos valores representan un foreingkey
-    entidad = serializers.PrimaryKeyRelatedField(write_only=True, queryset= Entidad.objects.all())
-    tipo_cuenta = serializers.PrimaryKeyRelatedField(write_only=True, queryset= TipoCuenta.objects.all())
-    moneda = serializers.PrimaryKeyRelatedField(write_only=True, queryset= Moneda.objects.all())
+    entidad = serializers.PrimaryKeyRelatedField(queryset= Entidad.objects.all())
+    categoria = serializers.PrimaryKeyRelatedField(queryset= Categoria.objects.all())
+    moneda = serializers.PrimaryKeyRelatedField(queryset= Moneda.objects.all())
     
     class Meta:
         model = Cuenta
         fields = ('id', 
                   'name',
                   'entidad', 
-                  'tipo_cuenta',
+                  'categoria',
                   'moneda')
 
 
@@ -123,7 +122,7 @@ class AsientoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Asiento
-        fields = ('id','descipcion', 'fecha_registro')
+        fields = ('id','descripcion', 'fecha_registro')
 
     
 class TipoComprobanteSerializer(serializers.ModelSerializer):

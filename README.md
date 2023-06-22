@@ -13,14 +13,20 @@ Desde django instalado en nuestra PC:
 
 # Realizar las migraciones
 ```python
-python3 manage.py migrate
-python3 manage.py makemigrations
+python manage.py migrate
+python manage.py makemigrations
+```
+
+# Agregar datos mock
+```bash
+python manage.py shell < ../mock_data/mock1.py
 ```
 
 # Django admin
-Primero debe contar con un super usuario:
-```python
-python3 manage.py createsuperuser
+Si lanzó el script de agregar datos ya contará con el siguiente usario creado en la DB:
+```
+usuario: admin
+password: contable1234
 ```
 Luego ingresar a:
 ```

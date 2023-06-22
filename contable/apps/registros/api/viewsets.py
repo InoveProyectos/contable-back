@@ -4,17 +4,18 @@ from ..models import *
 from .serializers import *
 # Se importa el módulo ViewSets que ofrece DRF
 from rest_framework import viewsets
+from rest_framework.decorators import action
 
 
 class RegistroViewSet(viewsets.ModelViewSet):
     permission_classes = [] # Falta autenticación
     serializer_class = RegistroSerializer
     queryset = serializer_class.Meta.model.objects.all()
+       
     
-    
-class CategoriaViewSet(viewsets.ModelViewSet):
+class PersoneriaViewSet(viewsets.ModelViewSet):
     permission_classes = [] # Falta autenticación
-    serializer_class = CategoriaSerializer
+    serializer_class = PersoneriaSerializer
     queryset = serializer_class.Meta.model.objects.all()
 
     
@@ -42,9 +43,9 @@ class IdentificacionViewSet(viewsets.ModelViewSet):
     queryset = serializer_class.Meta.model.objects.all()
 
 
-class TipoCuentaViewSet(viewsets.ModelViewSet):
+class CategoriaViewSet(viewsets.ModelViewSet):
     permission_classes = [] # Falta autenticación
-    serializer_class = TipoCuentaSerializer
+    serializer_class = CategoriaSerializer
     queryset = serializer_class.Meta.model.objects.all()
 
 
