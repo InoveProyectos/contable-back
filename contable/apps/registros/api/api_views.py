@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from django.http import JsonResponse
+from django.db import transaction
 from ..models import *
 from rest_framework.parsers import JSONParser
 from rest_framework import status
@@ -94,6 +95,7 @@ class RegistroAsientoAPIView(APIView):
     
     parser_classes = (JSONParser,)
     
+    @transaction.atomic
     def post(self, request):
         
         try:
@@ -131,6 +133,9 @@ class RegistroAsientoAPIView(APIView):
                     return JsonResponse(data={"error": "error en balance de registros"}, status=status.HTTP_400_BAD_REQUEST)
            
         except Exception as error:
-            # Si aparece alguna excepción, devolvemos un mensaje de error
+            # Si aparece alguna excepción
+            # Anulamos los campos de la base de datos (rollback)
+            transaction.set_rollback(True)
+            # Devolvemos un mensaje de error
             return JsonResponse(error, status=status.HTTP_400_BAD_REQUEST)
     
