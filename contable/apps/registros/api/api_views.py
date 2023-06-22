@@ -21,7 +21,7 @@ def sumatoria(entrada):
     
     try:
         for i in range(len(entrada)):
-            total_entrada  += float(entrada[i]['monto'])
+            total_entrada  += entrada[i]['monto']
     
     except Exception as e:
         print(type(e).__name__)
@@ -34,51 +34,44 @@ def insert(entrada,fecha_registro,asiento, ingreso):
     """ Recibe  como entrada(debe o haber), fecha de registro y el objeto asiento
         informa con Http si fue creado 
     """
-    try:
-        for i in range(len(entrada)):
-            cuenta = Cuenta.objects.filter(id=int(entrada[i]["cuenta_id"])).first()
 
-            if cuenta.id:                 
-                # Verificación de la fecha efectiva, que no sea None ni vacía.
-                if entrada[i].get("fecha_efectiva") is None or entrada[i].get("fecha_efectiva") == "":
-                    fecha_efectiva = fecha_registro
-                else:
-                    fecha_efectiva = entrada[i].get("fecha_efectiva")
+    for i in range(len(entrada)):
+        cuenta = Cuenta.objects.get(id=entrada[i]["cuenta_id"])
                 
-                # Si el debe trae una cantidad
-                monto = float(entrada[i].get("monto"))
-                ingreso_debe = None
-                ingreso_haber = None
+        # Verificación de la fecha efectiva, que no sea None ni vacía.
+        if entrada[i].get("fecha_efectiva") is None or entrada[i].get("fecha_efectiva") == "":
+            fecha_efectiva = fecha_registro
+        else:
+            fecha_efectiva = entrada[i].get("fecha_efectiva")
 
-                if monto is not None and ingreso == "debe":
-                    ingreso_debe = monto
-                    ingreso_haber = 0
+        # Si el debe trae una cantidad
+        monto = entrada[i]["monto"]
+        ingreso_debe = None
+        ingreso_haber = None
 
-                elif monto is not None and ingreso == "haber":
-                    ingreso_debe = 0
-                    ingreso_haber = monto
-                    
-                registro = Registro.objects.create(
-                                    cuenta = cuenta,
-                                    asiento = asiento,
-                                    numero_operacion = entrada[i].get("numero_operacion"),
-                                    concepto = entrada[i]["concepto"],
-                                    tipo_comprobante = entrada[i].get("tipo_comprobante") ,
-                                    debe = ingreso_debe,
-                                    haber = ingreso_haber,
-                                    fecha_registro = fecha_registro,
-                                    fecha_efectiva = fecha_efectiva,
-                                    comprobante = entrada[i].get("comprobante"),
-                                    observaciones = str(entrada[i].get("observaciones",'')),    
-                                )
-                registro.save()
-                
-            else: 
-                print("El id ingresado no existe")
-                return JsonResponse({}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        if monto is not None and ingreso == "debe":
+            ingreso_debe = monto
+            ingreso_haber = 0
+
+        elif monto is not None and ingreso == "haber":
+            ingreso_debe = 0
+            ingreso_haber = monto
             
-    except Exception as e:
-        return JsonResponse(e, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        registro = Registro.objects.create(
+                            cuenta = cuenta,
+                            asiento = asiento,
+                            numero_operacion = entrada[i].get("numero_operacion"),
+                            concepto = entrada[i]["concepto"],
+                            tipo_comprobante = entrada[i].get("tipo_comprobante") ,
+                            debe = ingreso_debe,
+                            haber = ingreso_haber,
+                            fecha_registro = fecha_registro,
+                            fecha_efectiva = fecha_efectiva,
+                            comprobante = entrada[i].get("comprobante"),
+                            observaciones = entrada[i].get("observaciones",''),
+                        )
+        registro.save()
+
 
 
 class RegistroAsientoAPIView(APIView):
@@ -114,7 +107,7 @@ class RegistroAsientoAPIView(APIView):
                 total_haber = sumatoria(haber)       
                 
                 resultado = total_debe - total_haber
-                if resultado == 0 and int(debe[0]["cuenta_id"]) is not None and int(haber[0]["cuenta_id"]) is not None:
+                if resultado == 0:
                     # 1)Insertar un nuevo asiento (crear un nuevo, y quedarnos con 
                     # el objeto para usar su ID)
                     # Convierte la fecha str en un objeto datetime
@@ -134,8 +127,10 @@ class RegistroAsientoAPIView(APIView):
                                         
                     return JsonResponse(data={}, status=status.HTTP_200_OK)
                     
+                else:
+                    return JsonResponse(data={"error": "error en balance de registros"}, status=status.HTTP_400_BAD_REQUEST)
            
         except Exception as error:
             # Si aparece alguna excepción, devolvemos un mensaje de error
-            return JsonResponse(error, status=status.HTTP_400_BAD_REQUEST, safe=False, template_name=None, content_type=None)
+            return JsonResponse(error, status=status.HTTP_400_BAD_REQUEST)
     
