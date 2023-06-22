@@ -1,12 +1,14 @@
-from rest_framework.views import APIView
-from django.http import JsonResponse
-from django.db import transaction
-from ..models import *
-from rest_framework.parsers import JSONParser
-from rest_framework import status
 import json
 from datetime import datetime
-import pytz
+
+from django.http import JsonResponse
+from django.db import transaction
+
+from rest_framework.views import APIView
+from rest_framework.parsers import JSONParser
+from rest_framework import status
+
+from ..models import *
 from ..api.serializers import *
 
 
