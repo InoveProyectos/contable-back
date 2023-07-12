@@ -7,10 +7,10 @@ from rest_framework.response import Response
 
 class RegistroSerializer(serializers.ModelSerializer):
     #Atributos relacionados, cuyos valores representan un foreingkey
-    cuenta = serializers.PrimaryKeyRelatedField(write_only=True, queryset= Cuenta.objects.all())
-    asiento = serializers.PrimaryKeyRelatedField(write_only=True, queryset= Asiento.objects.all())
-    tipo_comprobante = serializers.PrimaryKeyRelatedField(write_only=True, queryset= TipoComprobante.objects.all())
-    comprobante = serializers.PrimaryKeyRelatedField(write_only=True, queryset= Comprobante.objects.all())
+    cuenta = serializers.PrimaryKeyRelatedField(queryset= Cuenta.objects.all())
+    asiento = serializers.PrimaryKeyRelatedField(queryset= Asiento.objects.all())
+    tipo_comprobante = serializers.PrimaryKeyRelatedField(queryset= TipoComprobante.objects.all())
+    comprobante = serializers.PrimaryKeyRelatedField(queryset= Comprobante.objects.all())
 
 
     class Meta:
@@ -45,8 +45,8 @@ class CondicionImpositivaSerializer(serializers.ModelSerializer):
 
 class EntidadSerializer(serializers.ModelSerializer):
     #Atributos relacionados, cuyos valores representan un foreingkey
-    personeria = serializers.PrimaryKeyRelatedField(write_only=True, queryset= Personeria.objects.all())
-    condicion_impositiva = serializers.PrimaryKeyRelatedField(write_only=True, queryset= CondicionImpositiva.objects.all())
+    personeria = serializers.PrimaryKeyRelatedField(queryset= Personeria.objects.all())
+    condicion_impositiva = serializers.PrimaryKeyRelatedField(queryset= CondicionImpositiva.objects.all())
     
     class Meta:
         model = Entidad
@@ -65,8 +65,8 @@ class TipoIdentificacionSerializer(serializers.ModelSerializer):
 
 class IdentificacionSerializer(serializers.ModelSerializer):
     #Atributos relacionados, cuyos valores representan un foreingkey
-    tipo_identificacion = serializers.PrimaryKeyRelatedField(write_only=True, queryset= TipoIdentificacion.objects.all())
-    entidad = serializers.PrimaryKeyRelatedField(write_only=True, queryset= Entidad.objects.all())
+    tipo_identificacion = serializers.PrimaryKeyRelatedField(queryset= TipoIdentificacion.objects.all())
+    entidad = serializers.PrimaryKeyRelatedField(queryset= Entidad.objects.all())
     
     class Meta:
         model = Identificacion
@@ -107,7 +107,7 @@ class CuentaSerializer(serializers.ModelSerializer):
 
 class RetencionesSerializer(serializers.ModelSerializer):
     #Atributos relacionados, cuyos valores representan un foreingkey
-    cuenta = serializers.PrimaryKeyRelatedField(write_only=True, queryset= Cuenta.objects.all())
+    cuenta = serializers.PrimaryKeyRelatedField(queryset= Cuenta.objects.all())
 
     class Meta:
         model = Retenciones
@@ -141,8 +141,8 @@ class ComprobanteSerializer(serializers.ModelSerializer):
 
 class CuentasAsociadasSerializer(serializers.ModelSerializer):
     #Atributos relacionados, cuyos valores representan un foreingkey
-    cuenta_asociente = serializers.PrimaryKeyRelatedField(write_only=True, queryset= Cuenta.objects.all())
-    cuenta_asociada = serializers.PrimaryKeyRelatedField(write_only=True, queryset= Cuenta.objects.all())
+    cuenta_asociente = serializers.PrimaryKeyRelatedField(queryset= Cuenta.objects.all())
+    cuenta_asociada = serializers.PrimaryKeyRelatedField(queryset= Cuenta.objects.all())
 
     class Meta:
         model = CuentasAsociadas
