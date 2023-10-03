@@ -61,6 +61,18 @@ class CuentaViewSet(viewsets.ModelViewSet):
     queryset = serializer_class.Meta.model.objects.all()
 
 
+class CuentaAsociadaViewSet(viewsets.ModelViewSet):
+    permission_classes = [] # Falta autenticación
+    serializer_class = CuentaAsociadaSerializer
+    queryset = serializer_class.Meta.model.objects.all()
+
+
+class RetencionesViewSet(viewsets.ModelViewSet):
+    permission_classes = [] # Falta autenticación
+    serializer_class = RetencionesSerializer
+    queryset = serializer_class.Meta.model.objects.all()
+
+
 class AsientoViewSet(viewsets.ModelViewSet):
     permission_classes = [] # Falta autenticación
     serializer_class = AsientoSerializer

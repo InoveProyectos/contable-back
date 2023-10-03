@@ -105,6 +105,32 @@ class CuentaSerializer(serializers.ModelSerializer):
                   'moneda')
 
 
+class CuentaAsociadaSerializer(serializers.ModelSerializer):
+    #Atributos relacionados, cuyos valores representan un foreingkey
+    cuenta_asociente = serializers.PrimaryKeyRelatedField(queryset= Cuenta.objects.all())
+    cuenta_asociada = serializers.PrimaryKeyRelatedField(queryset= Cuenta.objects.all())
+
+    class Meta:
+        model = CuentasAsociadas
+        fields = ('id',
+                  'cuenta_asociente',
+                  'cuenta_asociada')
+
+
+class RegistrosSerializer(serializers.ModelSerializer):
+    #Atributos relacionados, cuyos valores representan un foreingkey
+    cuenta = serializers.PrimaryKeyRelatedField(queryset=Cuenta.objects.all())
+
+    class Meta:
+        model = Retenciones
+        fields = ('id',
+                  'cuenta',
+                  'valor',
+                  'unidad',
+                  'ultima_modificacion',
+                  )
+
+
 class RetencionesSerializer(serializers.ModelSerializer):
     #Atributos relacionados, cuyos valores representan un foreingkey
     cuenta = serializers.PrimaryKeyRelatedField(queryset= Cuenta.objects.all())

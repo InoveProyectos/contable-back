@@ -136,7 +136,7 @@ class Retenciones(models.Model):
     cuenta = models.ForeignKey(Cuenta, on_delete=models.CASCADE)
     valor = models.FloatField(default=0) 
     unidad = models.CharField(max_length=10)
-    ultima_modificacion = models.DateTimeField()
+    ultima_modificacion = models.DateTimeField(auto_now=True, editable=False)
 
     class Meta:
         db_table = 'retenciones'
