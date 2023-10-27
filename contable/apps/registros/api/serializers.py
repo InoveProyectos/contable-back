@@ -95,6 +95,8 @@ class CuentaSerializer(serializers.ModelSerializer):
     entidad = serializers.PrimaryKeyRelatedField(queryset= Entidad.objects.all())
     categoria = serializers.PrimaryKeyRelatedField(queryset= Categoria.objects.all())
     moneda = serializers.PrimaryKeyRelatedField(queryset= Moneda.objects.all())
+    retencion = serializers.PrimaryKeyRelatedField(queryset= Retenciones.objects.all())
+    rubro = serializers.PrimaryKeyRelatedField(queryset= Rubro.objects.all())
     
     class Meta:
         model = Cuenta
@@ -102,7 +104,9 @@ class CuentaSerializer(serializers.ModelSerializer):
                   'name',
                   'entidad', 
                   'categoria',
-                  'moneda')
+                  'moneda',
+                  'retencion',
+                  'rubro')
 
 
 class CuentaAsociadaSerializer(serializers.ModelSerializer):
@@ -132,13 +136,10 @@ class RegistrosSerializer(serializers.ModelSerializer):
 
 
 class RetencionesSerializer(serializers.ModelSerializer):
-    #Atributos relacionados, cuyos valores representan un foreingkey
-    cuenta = serializers.PrimaryKeyRelatedField(queryset= Cuenta.objects.all())
 
     class Meta:
         model = Retenciones
-        fields = ('id', 
-                  'cuenta',
+        fields = ('id',
                   'valor', 
                   'unidad',
                   'ultima_modificacion')

@@ -51,6 +51,21 @@ class MonedaAdmin(admin.ModelAdmin):
     list_display = ('id', 'denominacion')
 
 
+@admin.register(Rubro)
+class RubroAdmin(admin.ModelAdmin):
+    # Campos en la tabla moneda de la app registros
+    list_display = ('id', 'name')
+
+
+@admin.register(Retenciones)
+class RetencionesAdmin(admin.ModelAdmin):
+    # Campos en la tabla retenciones de la app registros
+    list_display = ('id',
+                  'valor',
+                  'unidad',
+                  'ultima_modificacion')
+
+
 @admin.register(Cuenta)
 class CuentaAdmin(admin.ModelAdmin):
     # Campos en la tabla cuentade de la app registros
@@ -58,18 +73,10 @@ class CuentaAdmin(admin.ModelAdmin):
                   'name',
                   'entidad', 
                   'categoria',
-                  'moneda')
+                  'moneda',
+                  'retencion',
+                  'rubro')
     
-
-@admin.register(Retenciones)
-class RetencionesAdmin(admin.ModelAdmin):
-    # Campos en la tabla retenciones de la app registros
-    list_display = ('id', 
-                  'cuenta',
-                  'valor', 
-                  'unidad',
-                  'ultima_modificacion')
-
 
 @admin.register(Asiento)
 class AsientoAdmin(admin.ModelAdmin):

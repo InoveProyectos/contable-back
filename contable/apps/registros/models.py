@@ -51,7 +51,7 @@ class TipoIdentificacion(models.Model):
     tipo_identificacion'''
 
     id = models.BigAutoField(primary_key=True)
-    name = models.CharField(max_length=60)   
+    name = models.CharField(max_length=60)
 
     class Meta:
         db_table = 'tipo_identificacion'
@@ -110,6 +110,36 @@ class Moneda(models.Model):
         return f'{self.denominacion}'
 
 
+class Retenciones(models.Model):
+    '''Esta clase hereda de Django models.Model y crea una tabla llamada
+    retenciones'''
+
+    id = models.BigAutoField(primary_key=True)
+    valor = models.FloatField(default=0)
+    unidad = models.CharField(max_length=10)
+    ultima_modificacion = models.DateTimeField(auto_now=True, editable=False)
+
+    class Meta:
+        db_table = 'retenciones'
+
+    def __str__(self):
+        return f'{self.valor}, {self.unidad}, {self.ultima_modificacion}'
+
+
+class Rubro(models.Model):
+    '''Esta clase hereda de Django models.Model y crea una tabla llamada
+    rubro'''
+
+    id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=60)
+
+    class Meta:
+        db_table = 'rubro'
+
+    def __str__(self):
+        return f'{self.name}'
+
+
 # Clase que tiene foreingkey de la clase Entidad, Categoria y Moneda.
 class Cuenta(models.Model):
     '''Esta clase hereda de Django models.Model y crea una tabla llamada
@@ -120,29 +150,14 @@ class Cuenta(models.Model):
     entidad = models.ForeignKey(Entidad, on_delete=models.CASCADE)
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     moneda = models.ForeignKey(Moneda, on_delete=models.CASCADE)
+    retencion = models.ForeignKey(Retenciones, on_delete=models.SET_NULL, default=None, blank=True, null=True)
+    rubro = models.ForeignKey(Rubro, on_delete=models.SET_NULL, default=None, blank=True, null=True)
    
     class Meta:
         db_table = 'cuenta'
 
     def __str__(self):
         return f'{self.id},{self.name}, {self.entidad}, {self.categoria}, {self.moneda}'
-
-
-class Retenciones(models.Model):
-    '''Esta clase hereda de Django models.Model y crea una tabla llamada
-    retenciones'''
-
-    id = models.BigAutoField(primary_key=True)
-    cuenta = models.ForeignKey(Cuenta, on_delete=models.CASCADE)
-    valor = models.FloatField(default=0) 
-    unidad = models.CharField(max_length=10)
-    ultima_modificacion = models.DateTimeField(auto_now=True, editable=False)
-
-    class Meta:
-        db_table = 'retenciones'
-
-    def __str__(self):
-        return f'{self.cuenta}, {self.valor}, {self.unidad}, {self.ultima_modificacion}'
 
 
 class Asiento(models.Model):
