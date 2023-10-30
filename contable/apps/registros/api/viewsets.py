@@ -54,6 +54,11 @@ class MonedaViewSet(viewsets.ModelViewSet):
     serializer_class = MonedaSerializer
     queryset = serializer_class.Meta.model.objects.all()
 
+class RubroViewSet(viewsets.ModelViewSet):
+    permission_classes = [] # Falta autenticación
+    serializer_class = RubroSerializer
+    queryset = serializer_class.Meta.model.objects.all()
+
 
 class CuentaViewSet(viewsets.ModelViewSet):
     permission_classes = [] # Falta autenticación

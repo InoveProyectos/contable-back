@@ -89,7 +89,14 @@ class MonedaSerializer(serializers.ModelSerializer):
         model = Moneda
         fields = ('id','denominacion')
 
-    
+
+class RubroSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Rubro
+        fields = ('id','name')
+
+
 class CuentaSerializer(serializers.ModelSerializer):
     #Atributos relacionados, cuyos valores representan un foreingkey
     entidad = serializers.PrimaryKeyRelatedField(queryset= Entidad.objects.all())

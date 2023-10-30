@@ -18,6 +18,7 @@ router.register(r'crud/condicion-impositiva', viewset=CondicionImpositivaViewSet
 router.register(r'crud/entidad', viewset=EntidadViewSet, basename='entidad') # Necesita que estén registrados los valores de FK 
 router.register(r'crud/categoria', viewset=CategoriaViewSet, basename='categoria')
 router.register(r'crud/moneda', viewset=MonedaViewSet, basename='moneda')
+router.register(r'crud/rubro', viewset=RubroViewSet, basename='rubro')
 
 # Ruta que debe permitir almacenar los datos para generar una cuentas asociadas
 router.register(r'crud/cuenta', viewset=CuentaViewSet, basename='cuenta') 
