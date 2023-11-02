@@ -102,7 +102,6 @@ class CuentaSerializer(serializers.ModelSerializer):
     entidad = serializers.PrimaryKeyRelatedField(queryset= Entidad.objects.all())
     categoria = serializers.PrimaryKeyRelatedField(queryset= Categoria.objects.all())
     moneda = serializers.PrimaryKeyRelatedField(queryset= Moneda.objects.all())
-    retencion = serializers.PrimaryKeyRelatedField(queryset= Retenciones.objects.all())
     rubro = serializers.PrimaryKeyRelatedField(queryset= Rubro.objects.all())
     
     class Meta:
@@ -140,16 +139,6 @@ class RegistrosSerializer(serializers.ModelSerializer):
                   'unidad',
                   'ultima_modificacion',
                   )
-
-
-class RetencionesSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Retenciones
-        fields = ('id',
-                  'valor', 
-                  'unidad',
-                  'ultima_modificacion')
 
 
 class AsientoSerializer(serializers.ModelSerializer):

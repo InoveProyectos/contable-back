@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MaxValueValidator
 
 
 # Create your models here.
@@ -150,7 +151,7 @@ class Cuenta(models.Model):
     entidad = models.ForeignKey(Entidad, on_delete=models.CASCADE)
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     moneda = models.ForeignKey(Moneda, on_delete=models.CASCADE)
-    retencion = models.ForeignKey(Retenciones, on_delete=models.SET_NULL, default=None, blank=True, null=True)
+    retencion = models.PositiveIntegerField(default=0, blank=True, validators=[MaxValueValidator(100)])
     rubro = models.ForeignKey(Rubro, on_delete=models.SET_NULL, default=None, blank=True, null=True)
    
     class Meta:

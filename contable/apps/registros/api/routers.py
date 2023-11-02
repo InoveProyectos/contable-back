@@ -23,7 +23,6 @@ router.register(r'crud/rubro', viewset=RubroViewSet, basename='rubro')
 # Ruta que debe permitir almacenar los datos para generar una cuentas asociadas
 router.register(r'crud/cuenta', viewset=CuentaViewSet, basename='cuenta') 
 router.register(r'crud/cuenta-asociada', viewset=CuentaAsociadaViewSet, basename='cuenta-asociada')
-router.register(r'crud/retenciones', viewset=RetencionesViewSet, basename='retenciones')
 
 # Ruta que debe permitir almacenar los datos para registro
 router.register(r'crud/registro', viewset=RegistroViewSet, basename='registro') 
