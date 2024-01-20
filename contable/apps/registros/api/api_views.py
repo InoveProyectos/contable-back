@@ -33,8 +33,8 @@ def sumatoria(entrada):
     return total_entrada
 
 
-def insert(entrada,fecha_registro,asiento, ingreso):
-    """ Recibe  como entrada(debe o haber), fecha de registro y el objeto asiento
+def insert(entrada,fecha_registro,fecha_efectiva,asiento, ingreso):
+    """ Recibe  como entrada(debe o haber), fecha de registro, fecha_efectiva y el objeto asiento
         informa con Http si fue creado 
     """
 
@@ -42,10 +42,12 @@ def insert(entrada,fecha_registro,asiento, ingreso):
         cuenta = Cuenta.objects.get(id=entrada[i]["cuenta_id"])
                 
         # Verificación de la fecha efectiva, que no sea None ni vacía.
-        if entrada[i].get("fecha_efectiva") is None or entrada[i].get("fecha_efectiva") == "":
-            fecha_efectiva = fecha_registro
+        if entrada[i].get("fecha_efectiva"):
+            registro_fecha_efectiva = datetime.strptime(entrada[i]["fecha_efectiva"], "%d/%m/%Y")
+        elif fecha_efectiva:
+            registro_fecha_efectiva = datetime.strptime(fecha_efectiva, "%d/%m/%Y")
         else:
-            fecha_efectiva = entrada[i].get("fecha_efectiva")
+            registro_fecha_efectiva = fecha_registro
 
         # Si el debe trae una cantidad
         monto = entrada[i]["monto"]
@@ -59,7 +61,7 @@ def insert(entrada,fecha_registro,asiento, ingreso):
         elif monto is not None and ingreso == "haber":
             ingreso_debe = 0
             ingreso_haber = monto
-            
+
         registro = Registro.objects.create(
                             cuenta = cuenta,
                             asiento = asiento,
@@ -69,7 +71,7 @@ def insert(entrada,fecha_registro,asiento, ingreso):
                             debe = ingreso_debe,
                             haber = ingreso_haber,
                             fecha_registro = fecha_registro,
-                            fecha_efectiva = fecha_efectiva,
+                            fecha_efectiva = registro_fecha_efectiva,
                             comprobante = entrada[i].get("comprobante"),
                             observaciones = entrada[i].get("observaciones",''),
                         )
@@ -119,6 +121,7 @@ class RegistroAsientoAPIView(APIView):
             debe = request.data["debe"]
             haber = request.data["haber"]
             fecha_registro = request.data["fecha_registro"]
+            fecha_efectiva = request.data.get("fecha_efectiva")
 
             if len(debe) != 0 and len(haber)!= 0:
                 total_debe = sumatoria(debe)
@@ -139,8 +142,8 @@ class RegistroAsientoAPIView(APIView):
                     asiento_create.save()
 
                     asiento = Asiento.objects.filter(fecha_registro = fecha_registro).first()
-                    insert(debe,fecha_registro,asiento, "debe")
-                    insert(haber,fecha_registro,asiento, "haber")
+                    insert(debe,fecha_registro,fecha_efectiva,asiento, "debe")
+                    insert(haber,fecha_registro,fecha_efectiva,asiento, "haber")
                     
                                         
                     return JsonResponse(data={}, status=status.HTTP_200_OK)
