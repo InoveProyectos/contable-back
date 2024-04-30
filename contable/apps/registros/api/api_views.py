@@ -33,7 +33,7 @@ def sumatoria(entrada):
     return total_entrada
 
 
-def insert(entrada,fecha_registro,fecha_efectiva,asiento, ingreso):
+def insert(entrada,fecha_registro,fecha_efectiva,asiento,cobro_diferido, ingreso):
     """ Recibe  como entrada(debe o haber), fecha de registro, fecha_efectiva y el objeto asiento
         informa con Http si fue creado 
     """
@@ -74,6 +74,7 @@ def insert(entrada,fecha_registro,fecha_efectiva,asiento, ingreso):
                             fecha_efectiva = registro_fecha_efectiva,
                             comprobante = entrada[i].get("comprobante"),
                             observaciones = entrada[i].get("observaciones",''),
+                            cobro_diferido = entrada[i].get("cobro_diferido", cobro_diferido),
                         )
         registro.save()
 
@@ -122,6 +123,7 @@ class RegistroAsientoAPIView(APIView):
             haber = request.data["haber"]
             fecha_registro = request.data["fecha_registro"]
             fecha_efectiva = request.data.get("fecha_efectiva")
+            cobro_diferido = request.data.get("costo_diferido", False)
 
             if len(debe) != 0 and len(haber)!= 0:
                 total_debe = sumatoria(debe)
@@ -142,8 +144,8 @@ class RegistroAsientoAPIView(APIView):
                     asiento_create.save()
 
                     asiento = Asiento.objects.filter(fecha_registro = fecha_registro).first()
-                    insert(debe,fecha_registro,fecha_efectiva,asiento, "debe")
-                    insert(haber,fecha_registro,fecha_efectiva,asiento, "haber")
+                    insert(debe,fecha_registro,fecha_efectiva,asiento,cobro_diferido, "debe")
+                    insert(haber,fecha_registro,fecha_efectiva,asiento,cobro_diferido, "haber")
                     
                                         
                     return JsonResponse(data={}, status=status.HTTP_200_OK)

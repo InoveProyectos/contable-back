@@ -26,7 +26,8 @@ class RegistroSerializer(serializers.ModelSerializer):
                   'fecha_registro', 
                   'fecha_efectiva', 
                   'comprobante', 
-                  'observaciones')
+                  'observaciones',
+                  'cobro_diferido')
         
 
 class PersoneriaSerializer(serializers.ModelSerializer):

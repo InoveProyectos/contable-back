@@ -221,6 +221,7 @@ class Registro(models.Model):
     fecha_efectiva = models.DateTimeField()
     comprobante = models.ForeignKey(Comprobante, on_delete=models.CASCADE, default=None, blank=True, null=True)    
     observaciones = models.CharField(max_length=300, default='')
+    cobro_diferido = models.BooleanField(default=False, blank=True)
      
     class Meta:
         db_table = 'registro'
