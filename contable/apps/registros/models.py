@@ -151,7 +151,7 @@ class Cuenta(models.Model):
     entidad = models.ForeignKey(Entidad, on_delete=models.CASCADE)
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     moneda = models.ForeignKey(Moneda, on_delete=models.CASCADE)
-    retencion = models.PositiveIntegerField(default=0, blank=True, validators=[MaxValueValidator(100)])
+    retencion = models.FloatField(default=0, blank=True, null=True, validators=[MaxValueValidator(100)])
     rubro = models.ForeignKey(Rubro, on_delete=models.SET_NULL, default=None, blank=True, null=True)
    
     class Meta:
@@ -220,7 +220,7 @@ class Registro(models.Model):
     fecha_registro = models.DateTimeField()
     fecha_efectiva = models.DateTimeField()
     comprobante = models.ForeignKey(Comprobante, on_delete=models.CASCADE, default=None, blank=True, null=True)    
-    observaciones = models.CharField(max_length=300, default='')        
+    observaciones = models.CharField(max_length=300, default='')
      
     class Meta:
         db_table = 'registro'
