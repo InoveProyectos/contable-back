@@ -4,6 +4,50 @@ from datetime import datetime
 
 admin = User.objects.create_user("admin", password="contable1234", is_staff=True, is_superuser=True)
 
+Rubro.objects.create(
+    name="Activo"
+)
+
+Rubro.objects.create(
+    name="Pasivo"
+)
+
+Rubro.objects.create(
+    name="Perdidas"
+)
+
+Rubro.objects.create(
+    name="Ganancias"
+)
+
+Categoria.objects.create(
+    name="Disponibilidades",
+)
+
+Categoria.objects.create(
+    name="Inversiones",
+)
+
+Categoria.objects.create(
+    name="Deudores a Cobrar",
+)
+
+Categoria.objects.create(
+    name="Cursos",
+)
+
+Categoria.objects.create(
+    name="Cuentas a Pagar",
+)
+
+Categoria.objects.create(
+    name="Gastos",
+)
+
+Categoria.objects.create(
+    name="Alumnos",
+)
+
 Personeria.objects.create(
     name="Fisica",
     )
@@ -17,21 +61,8 @@ CondicionImpositiva.objects.create(
     )
 
 CondicionImpositiva.objects.create(
-    name="Responsable inscripto",
+    name="Responsable Inscripto",
     )
-
-Entidad.objects.create(
-    name="Hernan Contigiani",
-    personeria=Personeria.objects.get(name="Fisica"),
-    condicion_impositiva=CondicionImpositiva.objects.get(name="Consumidor Final"),
-)
-
-Entidad.objects.create(
-    name="BBVA",
-    personeria=Personeria.objects.get(name="Juridica"),
-    condicion_impositiva=CondicionImpositiva.objects.get(name="Responsable inscripto"),
-)
-
 
 TipoIdentificacion.objects.create(
     name="DNI",
@@ -41,42 +72,26 @@ TipoIdentificacion.objects.create(
     name="CBU",
 )
 
-Identificacion.objects.create(
-    identificador="11222333",
-    tipo_identificacion=TipoIdentificacion.objects.get(name="DNI"),
-    entidad=Entidad.objects.get(name="Hernan Contigiani"),
-)
-
-Identificacion.objects.create(
-    identificador="0021154922154587",
-    tipo_identificacion=TipoIdentificacion.objects.get(name="CBU"),
-    entidad=Entidad.objects.get(name="BBVA"),
-)
-
-Categoria.objects.create(
-    name="Alumno",
-)
-
-Categoria.objects.create(
-    name="Banco",
+Moneda.objects.create(
+    denominacion="Ars",
 )
 
 Moneda.objects.create(
-    denominacion="ARS",
+    denominacion="u$s",
 )
 
-Cuenta.objects.create(
-    name="Alumno Hernan Contigiani",
-    entidad=Entidad.objects.get(name="Hernan Contigiani"),
-    categoria=Categoria.objects.get(name="Alumno"),
-    moneda=Moneda.objects.get(denominacion="ARS"),
+TipoComprobante.objects.create(
+    name="A",
 )
 
-Cuenta.objects.create(
-    name="Banco BBVA",
-    entidad=Entidad.objects.get(name="BBVA"),
-    categoria=Categoria.objects.get(name="Banco"),
-    moneda=Moneda.objects.get(denominacion="ARS"),
+TipoComprobante.objects.create(
+    name="B",
+)
+
+Entidad.objects.create(
+    name="Inove",
+    personeria=Personeria.objects.get(name="Juridica"),
+    condicion_impositiva=CondicionImpositiva.objects.get(name="Responsable Inscripto"),
 )
 
 
